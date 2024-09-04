@@ -1,0 +1,36 @@
+import java.util.Scanner;
+import java.util.Vector;
+
+class Solution {
+    public int missingNumber(int n, Vector<Integer> arr) {
+        // Calculate the sum of numbers from 1 to n
+        int totalSum = n * (n + 1) / 2;
+        
+        // Calculate the sum of elements in the array
+        int arrSum = 0;
+        for (int num : arr) {
+            arrSum += num;
+        }
+        
+        // The missing number is the difference between the expected sum and the actual sum
+        return totalSum - arrSum;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+
+            Vector<Integer> arr = new Vector<>(n - 1);
+            for (int i = 0; i < n - 1; ++i) {
+                arr.add(sc.nextInt());
+            }
+            Solution obj = new Solution();
+            System.out.println(obj.missingNumber(n, arr));
+        }
+        sc.close();
+    }
+}
