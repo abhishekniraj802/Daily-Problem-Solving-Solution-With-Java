@@ -1,0 +1,57 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+class Solution {
+    public void sort012(int[] arr) {
+        int zeroCount = 0, oneCount = 0, twoCount = 0;
+        
+        // Count the number of 0s, 1s, and 2s
+        for (int num : arr) {
+            if (num == 0) {
+                zeroCount++;
+            } else if (num == 1) {
+                oneCount++;
+            } else if (num == 2) {
+                twoCount++;
+            }
+        }
+        
+        // Update the array with 0s, 1s, and 2s
+        int i = 0;
+        while (zeroCount-- > 0) arr[i++] = 0;
+        while (oneCount-- > 0) arr[i++] = 1;
+        while (twoCount-- > 0) arr[i++] = 2;
+    }
+    
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        Scanner scanner = new Scanner(System.in);
+        
+        // Input size of array
+        System.out.print("Enter the size of the array: ");
+        int n = scanner.nextInt();
+        
+        int[] arr = new int[n];
+        
+        // Input elements of the array
+        System.out.println("Enter the elements (only 0, 1, 2): ");
+        for (int i = 0; i < n; i++) {
+            arr[i] = scanner.nextInt();
+        }
+        
+        // Call the sort012 function
+        solution.sort012(arr);
+        
+        // Output the sorted array
+        System.out.println("Sorted array: " + Arrays.toString(arr));
+    }
+}
+// Example: 1
+Input: arr[]= [0, 2, 1, 2, 0]
+Output: 0 0 1 2 2
+Explanation: 0s 1s and 2s are segregated into ascending order.
+
+Example: 2
+Input: arr[] = [0, 1, 0]
+Output: 0 0 1
+Explanation: 0s 1s and 2s are segregated into ascending order.
