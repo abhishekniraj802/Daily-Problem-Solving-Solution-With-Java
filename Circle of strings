@@ -1,0 +1,82 @@
+import java.util.*;
+
+class Solution {
+    public boolean isCircle(String[] arr) {
+        int n = arr.length;
+        List<Integer>[] adj = new ArrayList[26];  // Adjacency list for 26 lowercase letters
+        int[] inDegree = new int[26];
+        int[] outDegree = new int[26];
+        boolean[] mark = new boolean[26];
+
+        for (int i = 0; i < 26; i++) {
+            adj[i] = new ArrayList<>();
+        }
+
+        // Building the graph
+        for (int i = 0; i < n; i++) {
+            int u = arr[i].charAt(0) - 'a';  // First character of the string
+            int v = arr[i].charAt(arr[i].length() - 1) - 'a';  // Last character of the string
+
+            adj[u].add(v);
+
+            outDegree[u]++;
+            inDegree[v]++;
+
+            mark[u] = mark[v] = true;  // Mark the characters that appear in the strings
+        }
+
+        // Check if inDegree and outDegree are the same for each character
+        for (int i = 0; i < 26; i++) {
+            if (inDegree[i] != outDegree[i]) {
+                return false;
+            }
+        }
+
+        // BFS to check if all nodes with edges are connected
+        Queue<Integer> q = new LinkedList<>();
+        boolean[] vis = new boolean[26];
+        q.offer(arr[0].charAt(0) - 'a');  // Start BFS from the first character of the first string
+        vis[arr[0].charAt(0) - 'a'] = true;
+
+        while (!q.isEmpty()) {
+            int node = q.poll();
+            for (int adjNode : adj[node]) {
+                if (!vis[adjNode]) {
+                    vis[adjNode] = true;
+                    q.offer(adjNode);
+                }
+            }
+        }
+
+        // Check if all marked nodes (characters that appear) are visited
+        for (int i = 0; i < 26; i++) {
+            if (mark[i] && !vis[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();  // Number of test cases
+
+        while (t-- > 0) {
+            int n = sc.nextInt();  // Number of strings
+            String[] arr = new String[n];
+            for (int i = 0; i < n; i++) {
+                arr[i] = sc.next();
+            }
+
+            Solution sol = new Solution();
+            if (sol.isCircle(arr)) {
+                System.out.println("Yes");
+            } else {
+                System.out.println("No");
+            }
+        }
+
+        sc.close();
+    }
+}
