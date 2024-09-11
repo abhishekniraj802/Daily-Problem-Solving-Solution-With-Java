@@ -1,0 +1,59 @@
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+class Solution {
+    // Function to return the minimum cost of connecting the ropes
+    public long minCost(long[] arr) {
+        // PriorityQueue to act as a min-heap
+        PriorityQueue<Long> pq = new PriorityQueue<>();
+
+        // Add all elements from the array into the priority queue
+        for (long i : arr) {
+            pq.add(i);
+        }
+
+        long ans = 0;
+
+        // While there is more than one rope, combine the two smallest
+        while (pq.size() > 1) {
+            long a = pq.remove();
+            long b = pq.remove();
+            long cost = a + b;
+            ans += cost;
+            pq.add(cost);
+        }
+
+        return ans; // Return the total minimum cost
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Solution sol = new Solution();
+
+        // Read the number of test cases
+        System.out.print("Enter number of test cases: ");
+        int n = sc.nextInt();
+
+        // Loop through each test case
+        for (int i = 0; i < n; i++) {
+            // Read the number of ropes for the current test case
+            System.out.print("\nEnter the number of ropes for test case " + (i + 1) + ": ");
+            int size = sc.nextInt();
+            long[] ropes = new long[size];
+
+            // Read the lengths of the ropes
+            System.out.println("Enter the lengths of the ropes:");
+            for (int j = 0; j < size; j++) {
+                ropes[j] = sc.nextLong();
+            }
+
+            // Call the minCost function and print the result
+            long result = sol.minCost(ropes);
+            System.out.println("The minimum cost to connect the ropes for test case " + (i + 1) + " is: " + result);
+        }
+
+        sc.close();
+    }
+}
