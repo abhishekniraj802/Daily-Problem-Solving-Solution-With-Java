@@ -1,0 +1,121 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+// Definition for a binary tree node
+class Node {
+    int data;
+    Node left, right;
+
+    public Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+}
+
+class Solution {
+    Node prev = null;  // To track the previously processed node
+
+    // Function to convert Binary Tree to Doubly Linked List (DLL)
+    Node bToDLL(Node root) {
+        // Base case
+        if (root == null) {
+            return null;
+        }
+
+        Node head = null;
+
+        // Recursively convert the left subtree
+        head = bToDLL(root.left);
+
+        // If this is the leftmost node, it becomes the head of the DLL
+        if (prev == null) {
+            head = root;
+        } else {
+            // Adjust the pointers
+            prev.right = root;
+            root.left = prev;
+        }
+
+        // Update the previous pointer to current root
+        prev = root;
+
+        // Recursively convert the right subtree
+        bToDLL(root.right);
+
+        return head;
+    }
+
+    // Function to print the doubly linked list
+    void printList(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.data + " ");
+            temp = temp.right;
+        }
+    }
+
+    // Utility function to build a binary tree from n inputs using level order
+    Node buildTree(int[] inputs) {
+        if (inputs.length == 0) {
+            return null;
+        }
+
+        Node root = new Node(inputs[0]);  // Create the root
+        Queue<Node> queue = new LinkedList<>();  // Queue for level order insertion
+        queue.add(root);
+
+        int i = 1;
+        while (i < inputs.length) {
+            Node current = queue.poll();
+
+            // Insert left child
+            if (i < inputs.length) {
+                if (inputs[i] != -1) {  // Assuming -1 represents a NULL node
+                    current.left = new Node(inputs[i]);
+                    queue.add(current.left);
+                }
+                i++;
+            }
+
+            // Insert right child
+            if (i < inputs.length) {
+                if (inputs[i] != -1) {
+                    current.right = new Node(inputs[i]);
+                    queue.add(current.right);
+                }
+                i++;
+            }
+        }
+
+        return root;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Solution tree = new Solution();
+
+        // Input number of nodes
+        System.out.println("Enter number of nodes:");
+        int n = sc.nextInt();
+        
+        // Input nodes for the binary tree (-1 represents NULL)
+        int[] inputs = new int[n];
+        System.out.println("Enter node values (-1 for null):");
+        for (int i = 0; i < n; i++) {
+            inputs[i] = sc.nextInt();
+        }
+
+        // Build the binary tree from inputs
+        Node root = tree.buildTree(inputs);
+
+        // Convert binary tree to DLL
+        Node head = tree.bToDLL(root);
+
+        // Print the DLL
+        System.out.println("Doubly Linked List:");
+        tree.printList(head);
+
+        sc.close();
+    }
+}
