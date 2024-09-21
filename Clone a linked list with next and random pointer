@@ -1,0 +1,131 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node next, random;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+        this.random = null;
+    }
+}
+
+class Solution {
+    // Function to clone a linked list with next and random pointer.
+    Node copyList(Node head) {
+        if (head == null) return null;
+
+        // Step 1: Create a new node after each original node
+        Node current = head;
+        while (current != null) {
+            Node copy = new Node(current.data);
+            copy.next = current.next;
+            current.next = copy;
+            current = copy.next;
+        }
+
+        // Step 2: Assign random pointers to the new nodes
+        current = head;
+        while (current != null) {
+            if (current.random != null) {
+                current.next.random = current.random.next;
+            }
+            current = current.next.next;
+        }
+
+        // Step 3: Separate the original list and the copied list
+        current = head;
+        Node copyHead = current.next;
+        Node copyCurrent = copyHead;
+        while (current != null) {
+            current.next = current.next.next;
+            if (copyCurrent.next != null) {
+                copyCurrent.next = copyCurrent.next.next;
+            }
+            current = current.next;
+            copyCurrent = copyCurrent.next;
+        }
+
+        return copyHead;
+    }
+
+    // Helper function to print the linked list (for verification)
+    void printList(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            int randomData = (temp.random != null) ? temp.random.data : -1;
+            System.out.println("Node Data: " + temp.data + ", Random Data: " + randomData);
+            temp = temp.next;
+        }
+    }
+
+    // Helper function to create a linked list with random pointers from input
+    Node createList(int[] values, int[] randomIndices) {
+        if (values.length == 0) return null;
+
+        Node head = new Node(values[0]);
+        Node current = head;
+        Map<Integer, Node> nodeMap = new HashMap<>();
+        nodeMap.put(0, head);
+
+        // Create the linked list with next pointers
+        for (int i = 1; i < values.length; i++) {
+            Node newNode = new Node(values[i]);
+            current.next = newNode;
+            current = newNode;
+            nodeMap.put(i, newNode);
+        }
+
+        // Assign random pointers
+        current = head;
+        for (int i = 0; i < randomIndices.length; i++) {
+            if (randomIndices[i] != -1) {
+                nodeMap.get(i).random = nodeMap.get(randomIndices[i]);
+            }
+        }
+
+        return head;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Solution solution = new Solution();
+
+        // Input for the number of nodes
+        System.out.print("Enter number of nodes: ");
+        int n = scanner.nextInt();
+
+        // Input for the node values
+        int[] values = new int[n];
+        System.out.println("Enter the node values:");
+        for (int i = 0; i < n; i++) {
+            values[i] = scanner.nextInt();
+        }
+
+        // Input for the random pointer indices (-1 for null)
+        int[] randomIndices = new int[n];
+        System.out.println("Enter the random pointer indices (-1 for null):");
+        for (int i = 0; i < n; i++) {
+            randomIndices[i] = scanner.nextInt();
+        }
+
+        // Create the linked list
+        Node head = solution.createList(values, randomIndices);
+
+        // Print the original list
+        System.out.println("Original List:");
+        solution.printList(head);
+
+        // Clone the list
+        Node clonedList = solution.copyList(head);
+
+        // Print the cloned list
+        System.out.println("Cloned List:");
+        solution.printList(clonedList);
+
+        scanner.close();
+    }
+}
