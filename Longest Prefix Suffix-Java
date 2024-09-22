@@ -1,0 +1,50 @@
+import java.util.Scanner;
+
+class Solution {
+
+    // Function to find the length of the longest prefix which is also a suffix
+    int lps(String str) {
+        int i = 0, count = 0, k = 1, j = 1;
+        
+        while (i < str.length() && j < str.length()) {
+            if (str.charAt(i) == str.charAt(j)) {
+                i++;
+                j++;
+                count++;
+            } else {
+                i = 0;
+                j = k;
+                k++;
+                count = 0;
+            }
+        }
+        return count;
+    }
+
+    // Function to process multiple inputs and print results
+    void processInputs(int n, String[] strings) {
+        for (int i = 0; i < n; i++) {
+            System.out.println(lps(strings[i]));
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        // Read number of inputs
+        int n = sc.nextInt();
+        sc.nextLine();  // Consume the leftover newline
+        
+        // Array to hold input strings
+        String[] strings = new String[n];
+        
+        // Read each string input
+        for (int i = 0; i < n; i++) {
+            strings[i] = sc.nextLine();
+        }
+        
+        // Create an instance of Solution and process inputs
+        Solution sol = new Solution();
+        sol.processInputs(n, strings);
+    }
+}
