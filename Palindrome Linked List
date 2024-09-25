@@ -1,0 +1,94 @@
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node next;
+
+    Node(int d) {
+        data = d;
+        next = null;
+    }
+}
+
+class Solution {
+    // Function to reverse the linked list
+    static Node reverseList(Node head) {
+        if (head == null || head.next == null) return head;
+        Node curr_head = reverseList(head.next);
+        Node tail = head.next;
+        tail.next = head;
+        head.next = null;
+        return curr_head;
+    }
+
+    // Function to check whether the list is palindrome
+    static boolean isPalindrome(Node head) {
+        if (head == null) return true;
+
+        // Find the middle of the list using slow and fast pointers
+        Node slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Reverse the second half of the list
+        Node rev = reverseList(slow.next);
+        slow.next = null; // Disconnect the first half from the second half
+
+        // Compare the first and second halves
+        Node curr = head;
+        while (rev != null) {
+            if (rev.data != curr.data) return false;
+            rev = rev.next;
+            curr = curr.next;
+        }
+        return true;
+    }
+
+    // Function to insert a node at the end of the linked list
+    static Node insert(Node head, int data) {
+        Node newNode = new Node(data);
+        if (head == null) return newNode;
+        Node temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+        temp.next = newNode;
+        return head;
+    }
+
+    // Function to print the linked list (optional for debugging)
+    static void printList(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of test cases: ");
+        int n = sc.nextInt(); // Number of linked lists (test cases)
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter the number of elements in list " + (i + 1) + ": ");
+            int size = sc.nextInt();
+
+            Node head = null;
+            System.out.println("Enter the elements of the list:");
+            for (int j = 0; j < size; j++) {
+                int element = sc.nextInt();
+                head = insert(head, element);
+            }
+
+            // Check if the linked list is a palindrome
+            boolean result = isPalindrome(head);
+            System.out.println("List " + (i + 1) + " is " + (result ? "a palindrome." : "not a palindrome."));
+        }
+
+        sc.close();
+    }
+}
