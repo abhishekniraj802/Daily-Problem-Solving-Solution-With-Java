@@ -1,0 +1,73 @@
+import java.util.*;
+import java.io.*;
+import jala.lang.*;
+
+class GFG {
+
+public static void main(String[] args) throws IOException {
+
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); int t = Integer.parseInt(br.readLine());
+
+while (t--> 0) {
+
+int k= Integer.parseInt(br.readLine()); String line br.readLine();
+
+String[] tokens line.split(" ");
+
+// Create an ArrayList to store the integers ArrayList<Integer> array = new ArrayList<>();
+
+// Parse the tokens into integers and add to the array for (String token: tokens) { array.add(Integer.parseInt(token)); }
+
+int[] arr = new int[array.size()];
+
+int idx = 8;
+
+for (int 1: array) arr[idx++] = 1;
+
+Solution obj new Solution();
+
+int res obj.minimizeCost(k, arr);
+
+I
+
+System.out.println(res);
+
+}
+}
+
+}
+
+
+class Solution {
+    public int minimizeCost(int k, int arr[]) {
+        // code here
+        
+        int n = arr.length;
+        int dp[] = new int[n];
+        
+        Arrays.fill(dp , -1);
+        
+        return solve(0 , arr , dp , k);
+         
+    }
+    
+    int solve(int st , int arr[] , int dp[] , int k){
+        
+        int n = arr.length;
+        
+        if(st >= n-1) return 0;
+        
+        if(dp[st] != -1) return dp[st];
+        
+        int cost = (int) 1e8;
+        
+        for(int i = st + 1 ; i <= Math.min(st+k , n-1) ; i++){
+            
+            cost = Math.min(Math.abs(arr[st] - arr[i]) + solve(i , arr , dp , k) , cost);
+        }
+        
+        dp[st] = cost;
+        
+        return dp[st];
+    }
+}
